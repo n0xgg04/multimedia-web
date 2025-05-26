@@ -1,7 +1,6 @@
-"use client";
 import { Box, Text } from "@mantine/core";
 import React from "react";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../../components/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -18,7 +17,17 @@ export default function LoginPage() {
       >
         Đăng nhập
       </Text>
-      <LoginForm />
+
+      <LoginForm
+        RegisterAction={
+          <Text ta="center" size="13px" mt="sm">
+            Bạn chưa có tài khoản?{" "}
+            <Text span fw={600} c="#F44336" style={{ cursor: "pointer" }}>
+              Đăng ký
+            </Text>
+          </Text>
+        }
+      />
     </Box>
   );
 }

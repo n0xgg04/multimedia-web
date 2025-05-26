@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Stack, Text } from "@mantine/core";
+import { Button, Container, Flex, Stack, Text } from "@mantine/core";
 import React from "react";
 import MediaPic from "@/assets/images/png/MediaPic.png";
 import PicSmall from "@/assets/images/png/PicSmall.png";

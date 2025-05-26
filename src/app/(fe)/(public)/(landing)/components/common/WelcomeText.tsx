@@ -1,13 +1,9 @@
 "use client";
-import { Flex, Title, TitleOrder, useMatches, Text } from "@mantine/core";
+import { Flex, Text } from "@mantine/core";
 import React from "react";
 import Reveal from "./Reveal";
 
 export default function WelcomeText() {
-  const textSize = useMatches<TitleOrder>({
-    base: 1,
-  });
-
   return (
     <Reveal delay={1.5}>
       <Flex

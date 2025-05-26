@@ -6,31 +6,42 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "supabase:migrate:init": "mkdir -p prisma/migrations/0_init_supabase && pnpx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/0_init_supabase/migration.sql && pnpx prisma migrate resolve --applied 0_init_supabase",
+    "supabase:pull": "pnpx prisma db pull",
+    "supabase:generate": "supabase gen types typescript --project-id 'qzqzqzqzqzqzqzqzqzqz' --schema public > src/shared/utils/supabase/database.types.ts",
+    "prisma:generate": "pnpx prisma generate",
+    "prisma:migrate": "pnpx prisma migrate dev"
   },
   "dependencies": {
     "@mantine/core": "^8.0.1",
     "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^8.0.1",
+    "@prisma/client": "^6.8.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@tabler/icons-react": "^3.33.0",
     "@tanstack/react-query": "^5.76.1",
     "clsx": "^2.1.1",
     "motion": "^12.12.1",
     "next": "15.3.2",
     "next-api-decorators": "^2.0.2",
+    "prisma": "^6.8.2",
     "react": "^19.0.0",
     "react-compiler-runtime": "^19.1.0-rc.2",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
+    "react-toastify": "^11.0.5",
     "sass-embedded": "^1.89.0",
+    "supabase": ">=1.8.1",
     "tailwind-merge": "^3.3.0",
+    "ts-node": "^10.9.2",
     "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.1.7",
-    "@types/node": "^20",
+    "@types/node": "^20.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
@@ -41,6 +52,6 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^4.1.7",
-    "typescript": "^5"
+    "typescript": "^5.0.2"
   }
 }

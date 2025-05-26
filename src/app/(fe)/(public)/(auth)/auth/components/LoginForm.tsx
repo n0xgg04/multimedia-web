@@ -1,6 +1,6 @@
-import React from "react";
+"use client";
+import React, { useActionState, useEffect } from "react";
 import {
-  Button,
   PasswordInput,
   Stack,
   TextInput,
@@ -9,8 +9,14 @@ import {
   Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { login, LoginState } from "../actions/login";
+import LoginBtn from "./LoginBtn";
+import { toast } from "react-toastify";
 
-export default function LoginForm() {
+type Props = {
+  RegisterAction: React.ReactNode;
+};
+export default function LoginForm({ RegisterAction }: Props) {
   const form = useForm({
     initialValues: {
       email: "",
@@ -27,10 +33,24 @@ export default function LoginForm() {
 
   const isValid = form.isValid();
 
+  const [state, formAction, pending] = useActionState<LoginState, FormData>(
+    login,
+    {
+      error: null,
+    }
+  );
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+
   return (
-    <form onSubmit={form.onSubmit(() => {})}>
+    <form action={formAction}>
       <Stack gap="md">
         <TextInput
+          name="email"
           label="Email"
           {...form.getInputProps("email")}
           radius="md"
@@ -38,7 +58,6 @@ export default function LoginForm() {
           placeholder="Nhập email"
           styles={{
             input: {
-              background: "#F6F6F6",
               color: "#888",
               fontWeight: 500,
               fontSize: 13,
@@ -54,6 +73,7 @@ export default function LoginForm() {
           }
         />
         <PasswordInput
+          name="password"
           label="Mật khẩu"
           {...form.getInputProps("password")}
           radius="md"
@@ -68,6 +88,7 @@ export default function LoginForm() {
         />
         <Group justify="space-between" align="center">
           <Checkbox
+            name="remember"
             label={
               <Text size="13px" fw={400}>
                 Ghi nhớ mật khẩu
@@ -93,31 +114,8 @@ export default function LoginForm() {
             Quên mật khẩu?
           </Text>
         </Group>
-        <Button
-          fullWidth
-          size="md"
-          radius="md"
-          type="submit"
-          disabled={!isValid}
-          style={
-            !isValid
-              ? { background: "#E0E0E0", color: "#888", fontWeight: 700 }
-              : {
-                  background:
-                    "linear-gradient(239.18deg, #D501C5 -28.34%, #FF7900 43.3%, #FCD500 98.05%, #7739FC 181.74%)",
-                  color: "#fff",
-                  fontWeight: 700,
-                }
-          }
-        >
-          Đăng nhập
-        </Button>
-        <Text ta="center" size="13px" mt="sm">
-          Bạn chưa có tài khoản?{" "}
-          <Text span fw={600} c="#F44336" style={{ cursor: "pointer" }}>
-            Đăng ký
-          </Text>
-        </Text>
+        <LoginBtn isValid={isValid} pending={pending} />
+        {RegisterAction}
       </Stack>
     </form>
   );

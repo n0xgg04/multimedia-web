@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend_Deca } from "next/font/google";
 import "@/styles/globals.css";
-
+import { ToastContainer } from "react-toastify";
 import "@mantine/core/styles.css";
 import {
   ColorSchemeScript,
@@ -38,6 +38,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`${lexendDeca.variable} antialiased`}>
+        <ToastContainer />
         <TanstackQueryProvider>
           <MantineProvider theme={theme}>
             <AuthProvider>{children}</AuthProvider>

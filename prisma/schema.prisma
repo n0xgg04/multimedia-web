@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model comments {
+  id         BigInt   @id @default(autoincrement())
+  post_id    BigInt
+  user_id    String   @db.Uuid
+  content    String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model like_post {
+  id         BigInt   @id @default(autoincrement())
+  user_id    String   @db.Uuid
+  post_id    BigInt
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model post_attachments {
+  id         BigInt   @id @default(autoincrement())
+  post_id    BigInt
+  alt        String   @db.VarChar
+  image      String   @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  posts      posts    @relation(fields: [post_id], references: [id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model post_categories {
+  id         BigInt   @id @default(autoincrement())
+  name       String   @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  posts      posts[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model posts {
+  id               BigInt             @id @default(autoincrement())
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  author_uuid      String             @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  content          String
+  category_id      BigInt
+  comments         comments[]
+  like_post        like_post[]
+  post_attachments post_attachments[]
+  users            users              @relation(fields: [author_uuid], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post_categories  post_categories    @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  views            views[]
+
+  allow_comment Boolean @default(true)
+  like_like     Boolean @default(true)
+  is_deleted    Boolean @default(false)
+  is_hidden     Boolean @default(false)
+}
+
+model views {
+  id         BigInt   @id @default(autoincrement())
+  post_id    BigInt
+  user_id    String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([post_id, user_id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                     String                      @unique @db.VarChar
+  fullname                  String?                     @db.VarChar
+  profile_pic_url           String?                     @db.VarChar
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  student_code              String?                     @db.VarChar
+  comments                  comments[]
+  like_post                 like_post[]
+  posts                     posts[]
+  user_follow_organizations user_follow_organizations[]
+  user_rate_organizations   user_rate_organizations[]
+  oganization               oganization[]
+  account_type              ACCOUNT_TYPE                @default(STUDENT)
+  views                     views[]
+
+  @@index([email])
+}
+
+model oganization {
+  id            BigInt   @id @default(autoincrement())
+  name          String   @db.VarChar
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  avatar        String
+  user_owner_id String   @db.Uuid
+
+  user_follow_organizations user_follow_organizations[]
+  user_rate_organizations   user_rate_organizations[]
+  organization_info         organization_info           @relation(fields: [organization_info_id], references: [organize_id], onDelete: Cascade, onUpdate: Cascade)
+  organization_info_id      BigInt                      @unique
+  users                     users                       @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  owner_id                  String                      @db.Uuid
+}
+
+model organization_info {
+  organize_id BigInt  @unique
+  website     String? @db.VarChar(100)
+  description String? @db.Text
+
+  oganization oganization?
+}
+
+model user_follow_organizations {
+  id              BigInt      @id @default(autoincrement())
+  user_id         String      @db.Uuid
+  organization_id BigInt
+  created_at      DateTime    @default(now()) @db.Timestamptz(6)
+  users           users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organizations   oganization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([user_id, organization_id])
+}
+
+model user_rate_organizations {
+  id              BigInt      @id @default(autoincrement())
+  user_id         String      @db.Uuid
+  organization_id BigInt
+  created_at      DateTime    @default(now()) @db.Timestamptz(6)
+  users           users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  rate            Int         @default(5)
+  comment         String?     @db.VarChar
+  organizations   oganization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([user_id, organization_id])
+}
+
+enum ACCOUNT_TYPE {
+  STUDENT
+  ORGANIZATION
+  TEACHER
+  ADMIN
+}

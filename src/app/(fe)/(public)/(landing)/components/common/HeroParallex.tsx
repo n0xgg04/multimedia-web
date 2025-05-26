@@ -1,7 +1,7 @@
 "use client";
-import React, { RefObject, useRef } from "react";
+import React, { useRef } from "react";
 import HomeHeroImage from "@/assets/images/svg/HomeHeroImage";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 
 const MotionHomeHeroImage = motion.create(HomeHeroImage);
 
