@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import path from "path";
 
+//hihi
+
 const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
