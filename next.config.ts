@@ -4,7 +4,6 @@ import path from "path";
 const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
-    typedRoutes: true,
     viewTransition: true,
   },
   reactStrictMode: false,
