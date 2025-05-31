@@ -1,16 +1,20 @@
 import { Container, Text } from "@mantine/core";
 import React from "react";
 
-export default function ComponentName() {
+export default function Loading() {
   return (
     <Container
       w="100vw"
       h="100vh"
       fluid
       display="flex"
-      className="grid place-items-center"
+      pos="fixed"
+      className="!grid !place-items-center !z-50 !size-screen"
+      style={{
+        backgroundColor: "#460971",
+      }}
     >
-      <Text>Loading</Text>
+      <div className="loader"></div>
     </Container>
   );
 }

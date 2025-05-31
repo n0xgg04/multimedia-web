@@ -1,10 +1,9 @@
 import { cn } from "@/shared/utils/tw/cn";
-import { Container, Text } from "@mantine/core";
+import { Container, Flex, Image, Stack, Text } from "@mantine/core";
 import React from "react";
-import Image from "next/image";
 
-import GraphicImage from "@/assets/images/png/Graphic.png";
-import HeroImage from "@/assets/images/png/Hero.png";
+import HomeThumb from "@/assets/images/png/HomeThumb.png";
+import Reveal from "./common/Reveal";
 
 export default function PageFour({
   className,
@@ -17,37 +16,32 @@ export default function PageFour({
       h="100vh"
       w="100vw"
       display="flex"
-      className={cn("items-center justify-center", className)}
+      className={cn("items-center justify-center flex-col", className)}
       {...props}
     >
-      <div className="w-[80vw] grid grid-cols-7 grid-rows-3 gap-5 *:size-full *:aspect-square *:flex *:flex-col *:gap-5 *:rounded-lg *:!text-white">
-        <div className="col-span-2 row-span-2 p-20 bg-[#6073FA]">
-          <Image src={GraphicImage} alt="Graphic" />
-          <Text className="text-white text-center text-2xl font-bold">
-            Thiết kế 2D
-          </Text>
-        </div>
-        <div className="bg-[#B97DD5] p-5 !gap-1">
+      <Stack gap="xl" align="center">
+        <Flex>
+          <Stack gap="md" align="center">
+            <Text ta="center" c="white" fw={700} size="2.3rem">
+              Đa dạng ngành nghề thiết kế
+            </Text>
+            <Text ta="center" c="white" fw={400} size="0.9rem" w="70%">
+              Khoa học kỹ thuật trong thế kỷ 21 đã trải qua sự thay đổi đáng kể
+              và mang lại nhiều cơ hội việc làm và nghiên cứu trong đa dạng các
+              lĩnh vực khác nhau.
+            </Text>
+          </Stack>
+        </Flex>
+        <Reveal delay={0.1} transition={{ duration: 0.5 }}>
           <Image
-            src={HeroImage}
-            alt="Hero"
-            className="w-[80px] aspect-square"
+            h="50vh"
+            w="auto"
+            src={HomeThumb.src}
+            alt="Graphic"
+            fit="contain"
           />
-          <Text className="text-white text-center text-2xl font-bold">
-            Thiết kế 3D
-          </Text>
-        </div>
-        <div className=" bg-red-500">3</div>
-        <div className="bg-red-500 col-span-2 row-span-2">4</div>
-        <div className=" bg-red-500 ">5</div>
-        <div className=" bg-red-500 col-span-2 row-span-2">6</div>
-        <div className="bg-red-500">7</div>
-        <div className=" bg-red-500">8</div>
-        <div className=" bg-red-500">9</div>
-        <div className="bg-red-500">10</div>
-        <div className=" bg-red-500">11</div>
-        <div className=" bg-red-500">12</div>
-      </div>
+        </Reveal>
+      </Stack>
     </Container>
   );
 }

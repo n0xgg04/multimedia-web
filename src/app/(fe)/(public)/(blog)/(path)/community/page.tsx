@@ -1,10 +1,16 @@
 import PlusIcon from "@/assets/images/svg/PlusIcon";
 import { Text, Flex, Box, Stack } from "@mantine/core";
-import NewPostProvider from "./providers/NewPostProvider";
+import NewPostProvider from "./_providers/NewPostProvider";
+import NewPostModal from "./_components/NewPostModal";
+import NewPostButton from "./_components/NewPostButton";
+import Posts from "./_components/Posts";
+import FamousAccounts from "./_components/FamousAccounts";
+import OutstandingPosts from "./_components/OutstandingPosts";
 
 export default function CommunityPage() {
   return (
     <NewPostProvider>
+      <NewPostModal />
       <Flex direction="column" gap={10}>
         <Flex>
           <Text className="!text-[#4E4E4E] font-[1.1rem]">
@@ -12,15 +18,13 @@ export default function CommunityPage() {
           </Text>
         </Flex>
         <Flex className="mt-2">
-          <Stack className="cursor-pointer" align="center" gap={10}>
-            <Box className="rounded-full size-[60px] bg-white grid place-items-center shadow-md">
-              <PlusIcon />
-            </Box>
-            <Text className="!text-[#4E4E4E] !text-[.8rem] text-center font-semibold">
-              Viết bài
-            </Text>
-          </Stack>
+          <NewPostButton />
         </Flex>
+        <Stack gap={20}>
+          <Posts />
+          <FamousAccounts />
+          <OutstandingPosts />
+        </Stack>
       </Flex>
     </NewPostProvider>
   );

@@ -3,6 +3,13 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src/generated/kysely"
+  fileName     = "types.ts"
+  enumFileName = "enums.ts"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -36,9 +43,9 @@ model post_attachments {
   id         BigInt   @id @default(autoincrement())
   post_id    BigInt
   alt        String   @db.VarChar
-  image      String   @db.VarChar
+  object_id  String   @default("") @db.VarChar
   created_at DateTime @default(now()) @db.Timestamptz(6)
-  posts      posts    @relation(fields: [post_id], references: [id])
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -64,21 +71,21 @@ model posts {
   post_categories  post_categories    @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   views            views[]
 
-  allow_comment Boolean @default(true)
-  like_like     Boolean @default(true)
-  is_deleted    Boolean @default(false)
-  is_hidden     Boolean @default(false)
+  allow_comment Boolean         @default(true)
+  like_like     Boolean         @default(true)
+  is_deleted    Boolean         @default(false)
+  is_hidden     Boolean         @default(false)
+  post_comments post_comments[]
 }
 
 model views {
   id         BigInt   @id @default(autoincrement())
   post_id    BigInt
-  user_id    String   @db.Uuid
+  ip         String   @db.VarChar
   created_at DateTime @default(now()) @db.Timestamptz(6)
   posts      posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([post_id, user_id])
+  @@unique([post_id, ip])
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -96,7 +103,9 @@ model users {
   user_rate_organizations   user_rate_organizations[]
   oganization               oganization[]
   account_type              ACCOUNT_TYPE                @default(STUDENT)
-  views                     views[]
+  follower                  follow_user[]               @relation("follow_user_follower")
+  following                 follow_user[]               @relation("follow_user_following")
+  post_comments             post_comments[]
 
   @@index([email])
 }
@@ -133,6 +142,27 @@ model user_follow_organizations {
   organizations   oganization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([user_id, organization_id])
+}
+
+model follow_user {
+  id           BigInt @id @default(autoincrement())
+  follower_id  String @db.Uuid
+  following_id String @db.Uuid
+
+  users_follower  users @relation("follow_user_follower", fields: [follower_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users_following users @relation("follow_user_following", fields: [following_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model post_comments {
+  id         BigInt   @id @default(autoincrement())
+  user_id    String   @db.Uuid
+  post_id    BigInt
+  content    String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model user_rate_organizations {

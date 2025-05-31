@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import {  User } from "@supabase/supabase-js";
-import { Tables } from "~/@types/supabase/database.types";
+import { User } from "@supabase/supabase-js";
 import { createClient } from "../utils/supabase/client";
+import { Tables } from "../utils/supabase/database.types";
 
 type State = {
   status: "loading" | "authenticated" | "unauthenticated";
@@ -16,7 +16,7 @@ type Actions = {
   logout: (onSuccess?: () => void) => Promise<void>;
 };
 
-const supabase = createClient()
+const supabase = createClient();
 
 export const useAuthStore = create<State & Actions>((set) => ({
   status: "loading",

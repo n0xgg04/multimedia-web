@@ -12,6 +12,10 @@ import { useForm } from "@mantine/form";
 import { login, LoginState } from "../actions/login";
 import LoginBtn from "./LoginBtn";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/shared/stores/AuthStore";
+import useLogin from "../(path)/login/_queries/useLogin";
 
 type Props = {
   RegisterAction: React.ReactNode;
@@ -33,21 +37,15 @@ export default function LoginForm({ RegisterAction }: Props) {
 
   const isValid = form.isValid();
 
-  const [state, formAction, pending] = useActionState<LoginState, FormData>(
-    login,
-    {
-      error: null,
-    }
-  );
-
-  useEffect(() => {
-    if (state?.error) {
-      toast.error(state.error);
-    }
-  }, [state]);
+  const { mutate, isPending } = useLogin();
 
   return (
-    <form action={formAction}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutate(new FormData(e.target as HTMLFormElement));
+      }}
+    >
       <Stack gap="md">
         <TextInput
           name="email"
@@ -114,7 +112,7 @@ export default function LoginForm({ RegisterAction }: Props) {
             Quên mật khẩu?
           </Text>
         </Group>
-        <LoginBtn isValid={isValid} pending={pending} />
+        <LoginBtn isValid={isValid} pending={isPending} />
         {RegisterAction}
       </Stack>
     </form>

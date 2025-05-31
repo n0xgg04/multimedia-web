@@ -5,11 +5,41 @@
   --foreground: #171717;
 }
 
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+}
+.loader::before,
+.loader::after {    
+  content:"";
+  grid-area: 1/1;
+  --c:no-repeat radial-gradient(farthest-side,white 92%,#0000);
+  background: 
+    var(--c) 50%  0, 
+    var(--c) 50%  100%, 
+    var(--c) 100% 50%, 
+    var(--c) 0    50%;
+  background-size: 12px 12px;
+  animation: l12 1s infinite;
+}
+.loader::before {
+  margin: 4px;
+  filter: hue-rotate(45deg);
+  background-size: 8px 8px;
+  animation-timing-function: linear
+}
+
+@keyframes l12 { 
+  100%{transform: rotate(.5turn)}
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-lexend-deca);
+  --font-mono: var(--font-lexend-deca);
   --font-lexend-deca: var(--font-lexend-deca);
 }
 
@@ -19,6 +49,8 @@
   --color-text-black: #000000;
   --color-progress-bar: #CD8225;
   --color-progress-bar-secondary: #438AD5;
+  --color-text-label: #4E4E4E;
+  --color-text-subtitle: #858585;
 
   --color-bg-1: linear-gradient(245.61deg, #14003D -71.55%, #460971 79.32%);
   --color-bg-2: #543470;
@@ -59,6 +91,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-lexend-deca);
+  overscroll-behavior-y: none;
 }
 

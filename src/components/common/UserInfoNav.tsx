@@ -55,7 +55,7 @@ function UserMenu({
 }: React.PropsWithChildren<{
   fullname: string;
 }>) {
-  const { logout } = useAuthStore();
+  const { logout, userInfo } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = useCallback(() => {
@@ -72,7 +72,7 @@ function UserMenu({
 
       <Menu.Dropdown>
         <Menu.Label>Xin chào {fullname}</Menu.Label>
-        <Link href="/profile" prefetch>
+        <Link href={`/community/profile/${userInfo?.id}`} prefetch>
           <Menu.Item leftSection={<IconUser size={14} />}>
             Thông tin cá nhân
           </Menu.Item>

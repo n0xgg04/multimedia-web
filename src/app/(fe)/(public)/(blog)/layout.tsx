@@ -1,3 +1,4 @@
+import GlobalFooter from "@/components/common/GlobalFooter";
 import NavigationBar from "@/components/common/NavigationBar";
 import SafeAreaContainer from "@/components/common/SafeAreaContainer";
 import TabView from "@/components/common/TabView";
@@ -21,6 +22,7 @@ export default function BlogLayout({ children }: React.PropsWithChildren) {
       <SafeAreaContainer className="grow bg-[#F6F6F6]">
         {children}
       </SafeAreaContainer>
+      <GlobalFooter />
     </Flex>
   );
 }

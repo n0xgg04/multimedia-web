@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import TanstackQueryProvider from "@/shared/providers/TanstackQuery";
 import AuthProvider from "@/shared/providers/AuthProvider";
+import GlobalFooter from "@/components/common/GlobalFooter";
 
 const lexendDeca = Lexend_Deca({
   variable: "--font-lexend-deca",
@@ -37,7 +38,12 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${lexendDeca.variable} antialiased`}>
+      <body
+        className={`${lexendDeca.variable} antialiased`}
+        style={{
+          display: "swap",
+        }}
+      >
         <ToastContainer />
         <TanstackQueryProvider>
           <MantineProvider theme={theme}>

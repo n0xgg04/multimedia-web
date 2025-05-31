@@ -1,5 +1,5 @@
 "use client";
-import { Flex, Text } from "@mantine/core";
+import { Box, Container, Flex, Text } from "@mantine/core";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,6 +11,8 @@ type Props = {
     route: string;
   }[];
 } & React.ComponentProps<typeof Flex>;
+
+const MotionContainer = motion.create(Container);
 
 export default function TabView({ tabs, ...props }: Props) {
   const Id = useId();
@@ -70,9 +72,13 @@ function ActiveBar({
     setIsLoaded(false);
     const parent = ref.current?.parentElement;
     if (!parent) return;
+    const realActivePath = activePath.split("/")[1];
 
-    const activeTab = parent.querySelector(`[href="${activePath}"]`);
-    if (!activeTab) return;
+    const activeTab = parent.querySelector(`[href="/${realActivePath}"]`);
+    if (!activeTab) {
+      setIsLoaded(true);
+      return;
+    }
 
     const activeTabWidth = (activeTab as HTMLElement).offsetWidth;
     const activeTabLeft = (activeTab as HTMLElement).offsetLeft;
@@ -97,28 +103,52 @@ function ActiveBar({
   }, [calculateDimensions]);
 
   return (
-    <motion.div
-      ref={ref}
-      style={{
-        background:
-          "linear-gradient(93.21deg, #FC4AF5 -36.51%, #0846E4 135.15%)",
-        height: 2,
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        opacity: 0,
-      }}
-      animate={{
-        width: dimensions.width,
-        x: dimensions.x,
-        opacity: isLoaded ? 1 : 0,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      }}
-      className={className}
-    />
+    <>
+      {
+        <MotionContainer
+          animate={{
+            opacity: isLoaded ? 0 : 1,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          w="100vw"
+          h="100vh"
+          fluid
+          display="flex"
+          pos="fixed"
+          className="!grid !place-items-center !z-50 !size-screen inset-0 pointer-events-none"
+          style={{
+            backgroundColor: "#460971",
+            pointerEvents: "none",
+          }}
+        >
+          <div className="loader"></div>
+        </MotionContainer>
+      }
+      <motion.div
+        ref={ref}
+        style={{
+          background:
+            "linear-gradient(93.21deg, #FC4AF5 -36.51%, #0846E4 135.15%)",
+          height: 2,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          opacity: 0,
+        }}
+        animate={{
+          width: dimensions.width,
+          x: dimensions.x,
+          opacity: isLoaded ? 1 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+        }}
+        className={className}
+      />
+    </>
   );
 }

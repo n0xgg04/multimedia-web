@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
     viewTransition: true,
+    ppr: "incremental",
   },
+
   reactStrictMode: false,
   sassOptions: {
     implementation: "sass-embedded",
@@ -19,6 +21,14 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.redd.it",
+      },
+    ],
   },
 };
 

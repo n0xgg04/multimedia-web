@@ -6,6 +6,7 @@ import Image from "next/image";
 import RewardImage from "@/assets/images/png/Reward.png";
 import RubikImage from "@/assets/images/png/Rubic.png";
 import PainterImage from "@/assets/images/png/Paint.png";
+import Reveal from "./common/Reveal";
 
 export default function PageThree({
   className,
@@ -37,32 +38,38 @@ export default function PageThree({
           vọng bạn tham gia ngành nghề đầy thú vị và màu sắc này
         </Text>
         <Flex className="gap-10" align="flex-end">
-          <Flex direction="column" align="center">
-            <Image
-              src={RewardImage}
-              className="w-[25vw] md:size-[300px]"
-              alt="Reward"
-            />
-            <Text className="text-center !font-[700] text-[1.5rem]">
-              Sản phẩm
-            </Text>
-          </Flex>
-          <Flex direction="column" align="center">
-            <Image
-              src={RubikImage}
-              className="w-[30vw] md:size-[400px]"
-              alt="Rubik"
-            />
-            <Text className="!font-[700] text-[1.5rem]">Cộng đồng</Text>
-          </Flex>
-          <Flex direction="column" align="center">
-            <Image
-              src={PainterImage}
-              className="w-[25vw] md:size-[300px]"
-              alt="Rubik"
-            />
-            <Text className="!font-[700] text-[1.5rem]">Lộ trình</Text>
-          </Flex>
+          <Reveal delay={0.1}>
+            <Flex direction="column" align="center">
+              <Image
+                src={RewardImage}
+                className="w-[25vw] md:size-[300px] hover:scale-105 transition-all duration-300"
+                alt="Reward"
+              />
+              <Text className="text-center !font-[700] text-[1.5rem]">
+                Sản phẩm
+              </Text>
+            </Flex>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <Flex direction="column" align="center">
+              <Image
+                src={RubikImage}
+                className="w-[30vw] md:size-[400px] hover:scale-105 transition-all duration-300"
+                alt="Rubik"
+              />
+              <Text className="!font-[700] text-[1.5rem]">Cộng đồng</Text>
+            </Flex>
+          </Reveal>
+          <Reveal delay={0.6}>
+            <Flex direction="column" align="center">
+              <Image
+                src={PainterImage}
+                className="w-[25vw] md:size-[300px] hover:scale-105 transition-all duration-300"
+                alt="Rubik"
+              />
+              <Text className="!font-[700] text-[1.5rem]">Lộ trình</Text>
+            </Flex>
+          </Reveal>
         </Flex>
       </Flex>
     </Container>
