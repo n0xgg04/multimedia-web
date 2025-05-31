@@ -9,12 +9,8 @@ import {
   Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { login, LoginState } from "../actions/login";
 import LoginBtn from "./LoginBtn";
-import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/shared/stores/AuthStore";
+
 import useLogin from "../(path)/login/_queries/useLogin";
 
 type Props = {

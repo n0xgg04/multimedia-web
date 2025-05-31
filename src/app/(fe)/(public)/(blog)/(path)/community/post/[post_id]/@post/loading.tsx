@@ -37,6 +37,7 @@ export default async function Loading() {
           </Stack>
         </Group>
         <Button
+          loading={true}
           leftSection={<IconPlus width={16} height={16} />}
           radius="lg"
           bg="linear-gradient(93.21deg, #FC4AF5 -36.51%, #0846E4 135.15%)"

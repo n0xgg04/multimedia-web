@@ -104,8 +104,11 @@ export default function PostCard({
             router.push(`/community/profile/${author.id}`);
           }}
         >
-          <Avatar
-            className="!w-[24px] !h-[24px] !rounded-full object-cover"
+          <Image
+            className="!w-[24px] !h-[24px] !rounded-full !object-cover"
+            alt="author_avatar"
+            width={24}
+            height={24}
             src={author.avatar}
           />
           <Text className="!font-[500] !text-[.8rem] !text-[#4E4E4E]">

@@ -19,7 +19,6 @@ import PostGrid from "./PostGrid";
 export default function OutstandingPosts() {
   const { data, isLoading } = usePosts({
     limit: 4,
-    orderBy: "views",
     order: "desc",
   });
 

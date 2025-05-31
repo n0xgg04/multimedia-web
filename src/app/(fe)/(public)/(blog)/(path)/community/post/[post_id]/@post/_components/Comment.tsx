@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Group, Divider, Text, Avatar } from "@mantine/core";
+import { Stack, Group, Divider, Text, Avatar, Image } from "@mantine/core";
 import React from "react";
 import TimeAgo from "javascript-time-ago";
 import vi from "javascript-time-ago/locale/vi";
@@ -28,7 +28,12 @@ export default function Comment({ comment }: Props) {
   return (
     <Stack>
       <Group gap={10}>
-        <Avatar src={comment.users.profile_pic_url} size={30} />
+        <Avatar
+          src={comment.users.profile_pic_url}
+          radius={999}
+          size="md"
+          className="!cursor-pointer"
+        />
         <Stack
           gap={0}
           onClick={() => router.push(`/community/profile/${comment.users.id}`)}

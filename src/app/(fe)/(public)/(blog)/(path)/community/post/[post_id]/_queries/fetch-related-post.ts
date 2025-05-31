@@ -3,29 +3,34 @@
 import { prisma } from "@/shared/utils/prisma/client";
 import { createClient } from "@/shared/utils/supabase/server";
 
-type Props = {
-  limit?: number;
-  orderBy?: string;
-  order?: "asc" | "desc";
-  author_uuid?: string;
-};
-export async function fetchPost(
-  { limit = 4, orderBy = "created_at", order = "desc", author_uuid = "" }:
-    Props,
+export default async function fetchRelatedPost(
+  post_id: string,
+  page: number = 1,
+  pageSize: number = 10,
 ) {
   const supabase = await createClient();
   const currentUser = await supabase.auth.getUser();
 
-  return prisma.posts.findMany({
-    orderBy: {
-      [orderBy]: order,
+  const category = await prisma.posts.findFirst({
+    where: {
+      id: Number(post_id),
     },
-    take: limit,
-    where: !!author_uuid
-      ? {
-        author_uuid: author_uuid,
-      }
-      : undefined,
+    select: {
+      post_categories: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  const relatedPosts = await prisma.posts.findMany({
+    where: {
+      category_id: category?.post_categories.id,
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
     include: {
       post_attachments: {
         select: {
@@ -57,4 +62,6 @@ export async function fetchPost(
       },
     },
   });
+
+  return relatedPosts;
 }

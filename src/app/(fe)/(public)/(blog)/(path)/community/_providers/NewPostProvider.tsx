@@ -1,12 +1,14 @@
 "use client";
 import { useDisclosure, useFileDialog } from "@mantine/hooks";
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const NewPostContext = createContext<{
   isOpen: boolean;
   open: () => void;
   close: () => void;
   fileDialog: ReturnType<typeof useFileDialog>;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
 }>({
   isOpen: false,
   open: () => {},
@@ -16,6 +18,8 @@ const NewPostContext = createContext<{
     open: () => {},
     reset: () => {},
   },
+  isSubmitting: false,
+  setIsSubmitting: () => {},
 });
 
 export const useNewPost = () => {
@@ -28,9 +32,12 @@ export default function NewPostProvider({ children }: React.PropsWithChildren) {
     multiple: true,
     accept: "image/*",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
-    <NewPostContext.Provider value={{ isOpen, open, close, fileDialog }}>
+    <NewPostContext.Provider
+      value={{ isOpen, open, close, fileDialog, isSubmitting, setIsSubmitting }}
+    >
       {children}
     </NewPostContext.Provider>
   );

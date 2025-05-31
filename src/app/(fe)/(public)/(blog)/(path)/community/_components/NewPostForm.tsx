@@ -15,10 +15,11 @@ export default function NewPostForm({ children }: React.PropsWithChildren) {
     formState: { errors },
   } = useFormContext<NewPostSchema>();
   const { user } = useAuthStore();
-  const { close } = useNewPost();
+  const { close, setIsSubmitting } = useNewPost();
   const queryClient = useQueryClient();
 
   const onSubmit = async (data: NewPostSchema) => {
+    setIsSubmitting(true);
     const uuid = crypto.randomUUID();
     const { data: postData, error } = await supabase
       .from("posts")
@@ -42,7 +43,12 @@ export default function NewPostForm({ children }: React.PropsWithChildren) {
           });
       })
     );
-    await queryClient.refetchQueries({ queryKey: [QUERY_KEYS.POSTS] });
+    await Promise.all(
+      [QUERY_KEYS.POSTS, QUERY_KEYS.ALL_POSTS].map((key) =>
+        queryClient.refetchQueries({ queryKey: [key] })
+      )
+    );
+    setIsSubmitting(false);
     close();
   };
 

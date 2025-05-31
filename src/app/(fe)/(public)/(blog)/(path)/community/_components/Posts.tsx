@@ -23,6 +23,7 @@ export default function Posts() {
     limit: 4,
     orderBy: "created_at",
     order: "desc",
+    author_uuid: "",
   });
 
   return (

@@ -1,24 +1,20 @@
 "use client";
 import { QUERY_KEYS } from "@/shared/constants/queries";
-import { supabase } from "@/shared/utils/supabase/client";
-import { Tables } from "@/shared/utils/supabase/database.types";
+import { useAuthStore } from "@/shared/stores/AuthStore";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPost } from "../_actions/fetch_post";
+import fetchRelatedPost from "../_queries/fetch-related-post";
+import { supabase } from "@/shared/utils/supabase/client";
 
 type Props = {
-  limit?: number;
-  orderBy?: string;
-  order?: "asc" | "desc";
-  author_uuid?: string;
+  page: number;
+  pageSize: number;
+  post_id: string;
 };
-export default function usePosts({
-  limit = 4,
-  orderBy = "created_at",
-  order = "desc",
-  author_uuid = "",
-}: Props) {
+export default function useRelatedPost({ page, pageSize, post_id }: Props) {
+  const { user } = useAuthStore();
   return useQuery({
-    queryKey: [QUERY_KEYS.POSTS, author_uuid],
+    enabled: !!user?.id,
+    queryKey: [QUERY_KEYS.RELATED_POSTS, post_id, page, pageSize],
     queryFn: async () => {
       const url = supabase.storage
         .from("post.photos")
@@ -27,13 +23,7 @@ export default function usePosts({
         .slice(0, -1)
         .join("/");
 
-      const posts = await fetchPost({
-        limit,
-        orderBy,
-        order,
-        author_uuid,
-      });
-
+      const posts = await fetchRelatedPost(post_id, page, pageSize);
       return posts?.map((post) => ({
         ...post,
         is_liked_post: post.like_post.length > 0,
@@ -43,7 +33,5 @@ export default function usePosts({
         })),
       }));
     },
-    staleTime: Infinity,
-    gcTime: Infinity,
   });
 }

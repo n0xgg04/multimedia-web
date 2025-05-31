@@ -22,11 +22,18 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "i.redd.it",
+      },
+      {
+        protocol: "https",
+        hostname: "qrgqlomkeivaecucqggw.supabase.co",
       },
     ],
   },

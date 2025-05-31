@@ -19,6 +19,7 @@ import OptionIcon from "@/assets/images/svg/Option";
 import Comments from "./_components/Comments";
 import AuthorInfo from "./_components/AuthorInfo";
 import CommentList from "./_components/CommentList";
+import PostMenu from "./_components/PostMenu";
 
 type Props = {
   params: Promise<RouteParams>;
@@ -65,7 +66,7 @@ export default async function PostContent({ params }: Props) {
     <Stack>
       <Group justify="space-between" align="center">
         <Badge>{post?.post_categories?.name}</Badge>
-        <OptionIcon className="!cursor-pointer" />
+        <PostMenu post_id={post_id} post={post} />
       </Group>
       <Title order={2}>{post?.title}</Title>
       <Text c="#4E4E4E" className="!text-[.9rem]">
