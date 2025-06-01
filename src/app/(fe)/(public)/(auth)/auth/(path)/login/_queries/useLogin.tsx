@@ -1,3 +1,4 @@
+"use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login } from "@/app/(fe)/(public)/(auth)/auth/actions/login";
 import { toast } from "react-toastify";
@@ -12,9 +13,15 @@ export default function useLogin() {
 
   return useMutation({
     mutationFn: (formData: FormData) => login(formData),
-    onSuccess: async ({ user, userInfo }) => {
+    onSuccess: async ({ user, userInfo, error }) => {
+      if (error || !user || !userInfo) {
+        console.log(error);
+        toast.error(error);
+        return;
+      }
+
       toast.success("Đăng nhập thành công!");
-      setUser(user.user);
+      setUser(user?.user);
       setUserInfo({
         id: userInfo.id,
         fullname: userInfo.fullname,

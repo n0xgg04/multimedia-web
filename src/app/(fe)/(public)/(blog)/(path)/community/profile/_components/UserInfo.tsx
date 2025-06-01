@@ -27,7 +27,7 @@ export default async function UserInfo({ userId, TabContent }: UserInfoProps) {
   });
 
   if (!userInfo) {
-    throw new Error("User not found");
+    return null;
   }
 
   const top3Followers = await prisma.follow_user.findMany({

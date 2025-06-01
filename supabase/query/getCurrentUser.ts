@@ -7,7 +7,7 @@ export async function getCurrentUser() {
     error,
   } = await (await createClient()).auth.getUser();
   if (error) {
-    throw error;
+    return null;
   }
   return user;
 }

@@ -6,7 +6,10 @@ export async function followAuthor(authorId: string) {
   const currentUser = await suoabase.auth.getUser();
 
   if (!currentUser.data.user) {
-    throw new Error("User not found");
+    return {
+      error: "User not found",
+      data: null,
+    };
   }
 
   const user = await prisma.users.findUnique({
@@ -16,7 +19,10 @@ export async function followAuthor(authorId: string) {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    return {
+      error: "User not found",
+      data: null,
+    };
   }
 
   const isFollowing = await prisma.follow_user.findFirst({

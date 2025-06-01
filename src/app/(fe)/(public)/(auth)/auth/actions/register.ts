@@ -18,7 +18,11 @@ export async function register(formData: FormData) {
   };
 
   if (!data.email || !data.password || !data.fullname || !data.student_code) {
-    throw new Error("Vui lòng điền đầy đủ thông tin!");
+    return {
+      user: null,
+      userInfo: null,
+      error: "Vui lòng điền đầy đủ thông tin!",
+    };
   }
 
   const existingUser = await prisma.users.findFirst({
@@ -31,7 +35,11 @@ export async function register(formData: FormData) {
   });
 
   if (existingUser) {
-    throw new Error("Email hoặc mã sinh viên đã tồn tại!");
+    return {
+      user: null,
+      userInfo: null,
+      error: "Email hoặc mã sinh viên đã tồn tại!",
+    };
   }
 
   const { error, data: user } = await supabase.auth.signUp({
@@ -40,7 +48,11 @@ export async function register(formData: FormData) {
   });
 
   if (error) {
-    throw new Error("Đăng ký thất bại: " + error.message);
+    return {
+      user: null,
+      userInfo: null,
+      error: "Đăng ký thất bại",
+    };
   }
 
   if (user.user) {
@@ -67,14 +79,23 @@ export async function register(formData: FormData) {
     });
 
     if (!userInfo) {
-      throw new Error("Đăng ký thất bại!");
+      return {
+        user: null,
+        userInfo: null,
+        error: "Đăng ký thất bại!",
+      };
     }
 
     return {
       user,
       userInfo,
+      error: null,
     };
   }
 
-  throw new Error("Đăng ký thất bại!");
+  return {
+    user: null,
+    userInfo: null,
+    error: "Đăng ký thất bại!",
+  };
 }

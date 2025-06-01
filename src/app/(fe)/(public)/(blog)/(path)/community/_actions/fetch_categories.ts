@@ -8,7 +8,13 @@ export async function fetchCategories() {
     .select("*")
     .order("created_at", { ascending: false });
   if (error) {
-    throw error;
+    return {
+      error: error.message,
+      data: null,
+    };
   }
-  return data;
+  return {
+    data,
+    error: null,
+  };
 }

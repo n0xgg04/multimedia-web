@@ -13,8 +13,13 @@ export const generateMetadata = async (): Promise<Metadata> => {
     };
   }
   const info = await getUserInfo(user);
+  if (info.error) {
+    return {
+      title: "Hồ sơ",
+    };
+  }
   return {
-    title: info?.fullname || "Hồ sơ",
+    title: info.data?.fullname || "Hồ sơ",
   };
 };
 

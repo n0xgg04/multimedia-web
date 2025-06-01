@@ -20,7 +20,11 @@ export async function login(formData: FormData) {
   const { error, data: user } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    throw new Error("Email hoặc mật khẩu không chính xác!");
+    return {
+      error: "Email hoặc mật khẩu không chính xác!",
+      user: null,
+      userInfo: null,
+    };
   }
 
   const userInfo = await prisma.users.findUnique({
@@ -39,12 +43,17 @@ export async function login(formData: FormData) {
   });
 
   if (!userInfo) {
-    throw new Error("User not found");
+    return {
+      error: "Tài khoản không tồn tại!",
+      user: null,
+      userInfo: null,
+    };
   }
 
   return {
     user,
     userInfo,
+    error: null,
   };
 }
 

@@ -10,8 +10,14 @@ export async function getUserInfo(user: User) {
   ).single();
 
   if (error) {
-    throw error;
+    return {
+      error: error.message,
+      data: null,
+    };
   }
 
-  return data;
+  return {
+    data,
+    error: null,
+  };
 }

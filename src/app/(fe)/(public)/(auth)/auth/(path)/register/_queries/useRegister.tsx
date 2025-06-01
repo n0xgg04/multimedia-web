@@ -13,7 +13,12 @@ export default function useRegister() {
 
   return useMutation({
     mutationFn: (formData: FormData) => register(formData),
-    onSuccess: async ({ user, userInfo }) => {
+    onSuccess: async ({ user, userInfo, error }) => {
+      if (error || !user || !userInfo) {
+        toast.error(error);
+        return;
+      }
+
       toast.success("Đăng ký thành công!");
       setUser(user.user);
       setUserInfo({
