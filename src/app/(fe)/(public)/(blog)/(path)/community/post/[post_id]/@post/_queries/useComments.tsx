@@ -1,7 +1,9 @@
 "use client";
 import { QUERY_KEYS } from "@/shared/constants/queries";
+import { prisma } from "@/shared/utils/prisma/client";
 import { supabase } from "@/shared/utils/supabase/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { getComment } from "../_actions/get-comment";
 
 export default function useComments(post_id: number, pageSize: number = 10) {
   return useInfiniteQuery({
@@ -11,18 +13,9 @@ export default function useComments(post_id: number, pageSize: number = 10) {
       const from = pageParam * pageSize;
       const to = from + pageSize - 1;
 
-      const { data, error } = await supabase
-        .from("post_comments")
-        .select(
-          "*, users!post_comments_user_id_fkey(id, fullname, profile_pic_url, student_code)"
-        )
-        .eq("post_id", Number(post_id))
-        .order("created_at", { ascending: true })
-        .range(from, to);
+      const comments = await getComment(post_id, from, to);
 
-      if (error) throw new Error(error.message);
-
-      return data;
+      return comments;
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < pageSize) {

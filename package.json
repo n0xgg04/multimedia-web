@@ -11,7 +11,8 @@
     "supabase:pull": "pnpx prisma db pull",
     "supabase:generate": "supabase gen types typescript --project-id 'qrgqlomkeivaecucqggw' --schema public > src/shared/utils/supabase/database.types.ts",
     "prisma:generate": "pnpx prisma generate",
-    "prisma:db:push": "pnpx prisma db push"
+    "prisma:db:push": "pnpx prisma db push",
+    "postinstall": "pnpx prisma generate"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",

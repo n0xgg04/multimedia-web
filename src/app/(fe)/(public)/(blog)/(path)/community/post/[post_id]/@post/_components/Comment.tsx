@@ -29,21 +29,21 @@ export default function Comment({ comment }: Props) {
     <Stack>
       <Group gap={10}>
         <Avatar
-          src={comment.users.profile_pic_url}
+          src={comment.users?.profile_pic_url || ""}
           radius={999}
           size="md"
           className="!cursor-pointer"
         />
         <Stack
           gap={0}
-          onClick={() => router.push(`/community/profile/${comment.users.id}`)}
+          onClick={() => router.push(`/community/profile/${comment.users?.id}`)}
           className="cursor-pointer"
         >
           <Text className="!text-text-label !text-[14px]">
-            {comment.users.fullname}
+            {comment.users?.fullname}
           </Text>
           <Text className="!text-text-subtitle !text-[10px]">
-            {comment.users.student_code}
+            {comment.users?.student_code}
           </Text>
         </Stack>
       </Group>
